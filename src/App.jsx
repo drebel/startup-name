@@ -4,30 +4,25 @@ import viteLogo from '/vite.svg'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
 
+  function handleSubmit(e){
+    e.preventDefault()
+    console.log(e.target.nameIdea.value)
+    document.querySelector('#nameIdea').value = ''
+  }
+  
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <section className='instructions'>
+        <h1>Submit as many name ideas as you can</h1>
+        <h2>Three bouts of ten minutes is all you get. Then move on to the next step</h2>
+      </section>
+      <form action="" onSubmit={handleSubmit}>
+        <label htmlFor="nameIdea">Startup Name:</label>
+        <input name='nameIdea' id='nameIdea' type="text" />
+        <input type="submit" />
+      </form>
+      <a href="">Next Step</a>
     </>
   )
 }
