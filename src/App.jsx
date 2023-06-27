@@ -4,6 +4,8 @@ import './App.css'
 function App() {
 
   const [unrankedArray, setUnrankedArray] = React.useState([])
+  const [randomziedArray, setRandomziedArray] = React.useState()
+
 
   function handleSubmit(e){
     e.preventDefault()
@@ -13,6 +15,21 @@ function App() {
   }
 
   React.useEffect(() => console.table(unrankedArray))
+  React.useEffect(() => console.table(randomziedArray))
+
+  function handleNextStep(){
+    const copyUnrankedArray = [...unrankedArray]
+    const shuffledArray = shuffleArrayOrder(copyUnrankedArray)
+    setRandomziedArray(() => [...shuffledArray])
+  }
+
+  function shuffleArrayOrder(array){
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  }
 
   
   return (
@@ -26,7 +43,7 @@ function App() {
         <input name='nameIdea' id='nameIdea' type="text" />
         <input type="submit" />
       </form>
-      <a href="">Next Step</a>
+      <button onClick={handleNextStep}>Next Step!</button>
     </>
   )
 }
