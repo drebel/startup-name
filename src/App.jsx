@@ -44,6 +44,11 @@ function App() {
         <input type="submit" />
       </form>
       <button onClick={handleNextStep}>Next Step!</button>
+
+      <section className='rankArea'>
+        <button className='optionOne'>a</button>
+        <button className='optionTwo'>b</button>
+      </section>
     </>
   )
 }
