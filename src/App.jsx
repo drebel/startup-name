@@ -1,15 +1,19 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import React from 'react'
 import './App.css'
 
 function App() {
 
+  const [unrankedArray, setUnrankedArray] = React.useState([])
+
   function handleSubmit(e){
     e.preventDefault()
-    console.log(e.target.nameIdea.value)
+    const newNameIdea = e.target.nameIdea.value
+    setUnrankedArray(oldArray => [...oldArray, newNameIdea])
     document.querySelector('#nameIdea').value = ''
   }
+
+  React.useEffect(() => console.table(unrankedArray))
+
   
   return (
     <>
