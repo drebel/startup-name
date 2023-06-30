@@ -1,10 +1,16 @@
 import React from 'react'
 import './App.css'
+import {nanoid} from 'nanoid'
+import RankingButton from './RankingButton'
 
-function App() {
+export default function App() {
 
   const [unrankedArray, setUnrankedArray] = React.useState([])
-  const [randomziedArray, setRandomziedArray] = React.useState()
+  const [randomziedArray, setRandomziedArray] = React.useState([])
+  const [currentPair, setCurrentPair] = React.useState([])
+  const [rankedArray, setRankedArray] = React.useState([])
+  const [minRange, setMinRange] = React.useState()
+  const [maxRange, setMaxRange] = React.useState()
 
 
   function handleSubmit(e){
@@ -14,13 +20,16 @@ function App() {
     document.querySelector('#nameIdea').value = ''
   }
 
-  React.useEffect(() => console.table(unrankedArray))
-  React.useEffect(() => console.table(randomziedArray))
+  React.useEffect(() => console.table(unrankedArray), [unrankedArray])
+  React.useEffect(() => console.table(randomziedArray), [randomziedArray])
+  React.useEffect(() => console.table(rankedArray), [rankedArray])
+
 
   function handleNextStep(){
     const copyUnrankedArray = [...unrankedArray]
     const shuffledArray = shuffleArrayOrder(copyUnrankedArray)
-    setRandomziedArray(() => [...shuffledArray])
+    setRandomziedArray(shuffledArray)
+    showNextPair()
   }
 
   function shuffleArrayOrder(array){
@@ -31,7 +40,59 @@ function App() {
     return array;
   }
 
-  
+  // React.useEffect(() => showNextPair(), [])
+
+  const rankingElements = currentPair.map(e => <RankingButton key={e.id} value={e.value} maxRange={e.maxRange} minRange={e.minRange} rankedIndex={e.rankedIndex} handleChoice={() => handleChoice(e.value)}/>)
+
+  function showNextPair(){
+    if(rankedArray.length === 0){
+      const pair = randomziedArray.slice(0,2)
+      let firstPairObjectsArray = []
+      for(let i = 0; i < pair.length; i++){
+        firstPairObjectsArray.push({
+          value: pair[i],
+          id: nanoid(),
+          maxRange: rankedArray.length,
+          minRange: 0
+        })
+      }
+      setCurrentPair(firstPairObjectsArray)
+      setRandomziedArray(randomziedArray.slice(2))
+      console.log(firstPairObjectsArray)
+    } else{
+      let pairObjectsArray = []
+      console.log(pairObjectsArray)
+      let currentlyRanking = {
+        value: randomziedArray.pop(),
+        id: nanoid(),
+        maxRange: rankedArray.length-1,
+        minRange: 0
+      }
+      pairObjectsArray.push(currentlyRanking)
+      let rankedItem = {
+        id: nanoid(),
+        rankedIndex: Math.floor((rankedArray.length-1)/2),
+        value: rankedArray[Math.floor((rankedArray.length-1)/2)],
+      }
+      pairObjectsArray.push(rankedItem)
+      setCurrentPair(pairObjectsArray)
+      console.log(pairObjectsArray)
+  }}
+
+  function handleChoice(choice){
+    const chosenOption = currentPair.find(element => element.value === choice);
+    const unchosenOption = currentPair.find(element => element.value !== choice);
+    if(rankedArray.length === 0){
+      setRankedArray([chosenOption, unchosenOption])
+      setMinRange(rankedArray.indexOf(chosenOption))
+      setMaxRange(rankedArray.indexOf(unchosenOption+1))
+    }else{
+      showNextPair()
+      setUnrankedArray(prevUnrankedArray => prevUnrankedArray.slice(1))
+    }
+  }
+
+
   return (
     <>
       <section className='instructions'>
@@ -46,11 +107,9 @@ function App() {
       <button onClick={handleNextStep}>Next Step!</button>
 
       <section className='rankArea'>
-        <button className='optionOne'>a</button>
-        <button className='optionTwo'>b</button>
+        <h2>Rank Names</h2>
+        {rankingElements}
       </section>
     </>
   )
 }
-
-export default App
