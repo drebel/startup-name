@@ -1,19 +1,22 @@
 import React from 'react'
 import './App.css'
-import {nanoid} from 'nanoid'
+import {nanoid, random} from 'nanoid'
 import RankingButton from './RankingButton'
 
 export default function App() {
 
   const [unrankedArray, setUnrankedArray] = React.useState([])
-  const [randomizedArray, setRandomizedArray] = React.useState([])
-  const [currentPair, setCurrentPair] = React.useState([])
-  const [rankedArray, setRankedArray] = React.useState([])
-  const [minRange, setMinRange] = React.useState(0)
+  // const [randomizedArray, setRandomizedArray] = React.useState([]) // does this need to be state? no
+  let randomizedArray = []
+
+  const [randomizedIndex, setUnrandomizededIndex] = React.useState(1)
+  const [currentPair, setCurrentPair] = React.useState([]) // yes? can this be an index referencing the randomized array?
+  const [rankedArray, setRankedArray] = React.useState([]) // it will get rendered eventually, so yes?
+  const [minRange, setMinRange] = React.useState(0) // maybe the ranges can be not state since they arent getting rendered. its just a calculation
   const [maxRange, setMaxRange] = React.useState(1)
 
   React.useEffect( () => console.log(unrankedArray), [unrankedArray])
-  React.useEffect( () => console.log(randomizedArray), [randomizedArray])
+  // React.useEffect( () => console.log(randomizedArray), [randomizedArray])
   React.useEffect( () => console.log(currentPair), [currentPair])
   React.useEffect( () => console.log(rankedArray), [rankedArray])
 
@@ -28,8 +31,10 @@ export default function App() {
   }
 
   function handleRandomize(){
-    setRandomizedArray(randomizeList(unrankedArray))
+    // setRandomizedArray(randomizeList(unrankedArray))
     // setRankedArray(randomizedArray[0])
+    randomizedArray = randomizeList(unrankedArray)
+    console.log(randomizedArray)
   }
 
   function randomizeList(array){
@@ -49,21 +54,22 @@ export default function App() {
 
   function handleSetRankedArray(){
     setRankedArray(randomizedArray[0])
-    setRandomizedArray(prevRandomizedArray => prevRandomizedArray.slice(1))
+    // setRandomizedArray(prevRandomizedArray => prevRandomizedArray.slice(1))
 
   }
 
   function handleShowFirstCard(){
-    setCurrentPair([
-      {
-        value: randomizedArray[0],
-        id: nanoid()
-      },
-      {
-        value: rankedArray[0],
-        id: nanoid()
-      }
-    ])
+    // setCurrentPair([
+    //   {
+    //     value: randomizedArray[randomizedIndex],
+    //     id: nanoid()
+    //   },
+    //   {
+    //     value: rankedArray[0],
+    //     id: nanoid()
+    //   }
+    // ])
+    console.log(randomizedArray)
   }
 
 
