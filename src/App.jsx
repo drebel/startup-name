@@ -9,6 +9,8 @@ export default function App() {
   const [randomizedArray, setRandomizedArray] = React.useState([])
   const [currentPair, setCurrentPair] = React.useState([])
   const [rankedArray, setRankedArray] = React.useState([])
+  const [minRange, setMinRange] = React.useState(0)
+  const [maxRange, setMaxRange] = React.useState(1)
 
   React.useEffect( () => console.log(unrankedArray), [unrankedArray])
   React.useEffect( () => console.log(randomizedArray), [randomizedArray])
@@ -69,8 +71,45 @@ export default function App() {
     return <RankingButton 
       value={e.value}
       key={e.id}
+      handleChoice={() => handleChoice(e.id)}
     />
   })
+
+  function handleChoice(id){
+    const choice = currentPair.find(e => e.id === id)
+    const notChoice = currentPair.find(e => e.id !== id)
+    const isChoiceAlreadyRanked = currentPair.some(e => e.value === choice)
+     //if the current choice is unranked
+     // check to see if range is the same
+     // if so, insert the choice into ranked array
+     // if not
+     // 
+     // change the values of max range
+
+    
+    console.log(choice)
+    if(isChoiceAlreadyRanked){
+      setMinRange(rankedArray.indexOf(choice.value))
+    }else{
+      setMaxRange(rankedArray).indexOf(choice.value)
+    }
+    if(maxRange === minRange ){
+      rankedArray.splice(minRange, 0, choice.value)
+    }else{
+      const range = maxRange - minRange
+      const rangeMidpoint = Math.floor(range / 2) + minRange
+      setCurrentPair([
+        {
+          value: randomizedArray[0],
+          id: nanoid()
+        },
+        {
+          value: rankedArray[rangeMidpoint],
+          id: nanoid()
+        }
+      ])
+    }
+  }
 
 
   return (
@@ -83,10 +122,15 @@ export default function App() {
         <input name='nameIdea' id='nameIdea' type="text" placeholder='Name Idea' />
         <button type="submit" >Submit!</button>
       </form>
-      <button onClick={handleRandomize}>Randomize Order</button>
-      <button onClick={handleSetRankedArray}>Set ranked Array</button>
-      <button onClick={handleShowFirstCard}>Show First Cards</button>
-      {rankingElements}
+      <section>
+        <button onClick={handleRandomize}>Randomize Order</button>
+        <button onClick={handleSetRankedArray}>Set ranked Array</button>
+        <button onClick={handleShowFirstCard}>Show First Cards</button>
+      </section>
+      <section>
+        <h2>Select preferred option</h2>
+        {rankingElements}
+      </section>
     </>
   )
 }
